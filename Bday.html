@@ -113,6 +113,11 @@
         <button id="btn-sorpresa" class="hidden px-8 py-4 bg-pink-500 text-white font-bold rounded-full animate-heartbeat text-xl shadow-lg hover:bg-pink-600 transition-colors" onclick="openSurprise()">
             ¡Ver Sorpresa!
         </button>
+
+        <!-- BOTÓN DE PRUEBA (Bórralo antes de dárselo) -->
+        <button onclick="openSurprise()" class="mt-8 px-6 py-2 bg-gray-800 text-white font-bold rounded-full opacity-50 hover:opacity-100 transition-opacity">
+            [Prueba: Ver sorpresa ahora]
+        </button>
     </div>
 
     <!-- PANTALLA 2: LA SORPRESA -->
@@ -126,25 +131,25 @@
             <!-- Foto 1 -->
             <div class="photo-frame -rotate-2 w-64 md:w-72">
                 <div class="w-full aspect-square bg-gray-200 rounded-sm overflow-hidden flex items-center justify-center">
-                    <img src="https://placehold.co/400x400/ffb6c1/ffffff?text=Foto+1" alt="♡" class="w-full h-full object-cover">
+                    <img src="Foto1.jpeg" alt="♡" class="w-full h-full object-cover">
                 </div>
-                <p class="text-center font-handwriting text-2xl mt-4 text-gray-700">¡Siempre juntas!</p>
+                <p class="text-center font-handwriting text-2xl mt-4 text-gray-700">♡</p>
             </div>
 
             <!-- Foto 2 -->
             <div class="photo-frame rotate-3 w-64 md:w-72 mt-8 lg:mt-0">
                 <div class="w-full aspect-square bg-gray-200 rounded-sm overflow-hidden flex items-center justify-center">
-                    <img src="https://placehold.co/400x400/d8b4e2/ffffff?text=Foto+2" alt="♡" class="w-full h-full object-cover">
+                    <img src="Foto2.jpeg" alt="♡" class="w-full h-full object-cover">
                 </div>
                 <p class="text-center font-handwriting text-2xl mt-4 text-gray-700">Te amodoro 💕</p>
             </div>
 
             <!-- Foto 3 -->
             <div class="photo-frame -rotate-3 w-64 md:w-72 mt-8 lg:mt-0">
-                <div class="w-full aspect-square bg-gray-200 rounded-sm overflow-hidden flex items-center justify-center">
-                    <img src="https://placehold.co/400x400/b4e2d8/ffffff?text=Foto+3" alt="♡" class="w-full h-full object-cover">
+                <div class="w-full bg-gray-200 rounded-sm overflow-hidden">
+                    <img src="Foto3.jpeg" alt="♡" class="w-full h-auto">
                 </div>
-                <p class="text-center font-handwriting text-2xl mt-4 text-gray-700">Los mejores momentos</p>
+                <p class="text-center font-handwriting text-2xl mt-4 text-gray-700">♡</p>
             </div>
         </div>
 
@@ -235,14 +240,13 @@
 
         // --- 3. LÓGICA DE LA CARTA ---
         const letterContent = `
-            ¡Feliz cumpleaños!<br><br>
-            Hoy celebramos un año más de tu vida, y no podría estar más feliz de compartirlo contigo. 
-            Eres más que una hermana para mí, eres mi compañera de aventuras, mi confidente y una de mis personas favoritas en todo el mundo.<br><br>
-            Espero que este día esté lleno de sorpresas, risas, pastel y mucho amor. 
-            Que todos tus deseos se hagan realidad y que este nuevo año te traiga muchísima felicidad.<br><br>
-            ¡Te quiero con todo mi corazón! Disfruta mucho tu día.<br><br>
+            ¡Feliz cumpleaños ❤️!<br><br>
+            Hoy cumples un año mas de vida, te extraño. Estas fotos me recuerdan que aunque crezcamos, hay cosas que no cambian: mi cariño por ti y la seguridad de que contamos entre nosotros.<br><br>
+            Gracias por ser mi cómplice, por las risas y momentos. No solo eres mi hermana, eres de las personas más importantes y valiosas de mi vida.<br><br>
+            Deseo que sigas mejorando siempre, creciendo en tu trabajo y que logres cosas muy grandes. Te mereces todo lo bueno del mundo ¡Te quiero con todo mi corazón! Disfruta mucho tu día.<br><br>
             Con mucho cariño,<br>
-            Tu herman@.
+            El hermano guapo 🤪. 
+            P.D. Espero que no te rajes para el Hyrox
         `;
         
         const textContainer = document.getElementById('letter-text');
