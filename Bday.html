@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Happy Birthday!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #fce7f3 0%, #f3e8ff 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .font-handwriting { font-family: 'Caveat', cursive; }
+
+        .fade-out { animation: fadeOut 1s forwards; }
+        .fade-in { animation: fadeIn 1.5s forwards; display: flex !important; }
+
+        @keyframes fadeOut {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(0.95); visibility: hidden; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .photo-frame {
+            background-color: white;
+            padding: 10px 10px 40px 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transition: all 0.5s ease-in-out;
+            cursor: pointer;
+        }
+        .photo-frame:hover {
+            transform: scale(1.1) rotate(3deg);
+            box-shadow: 0 20px 30px rgba(0,0,0,0.15);
+            z-index: 10;
+        }
+        .photo-frame:nth-child(2):hover { transform: scale(1.1) rotate(-3deg); }
+        .photo-frame:nth-child(3):hover { transform: scale(1.1) rotate(4deg); }
+
+        .paper-letter {
+            background-color: #fffbf0;
+            background-image: linear-gradient(rgba(200, 200, 200, 0.2) 1px, transparent 1px);
+            background-size: 100% 30px;
+            box-shadow: 2px 5px 15px rgba(0,0,0,0.08);
+            border-radius: 2px;
+            position: relative;
+        }
+        .paper-letter::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 20px; bottom: 0;
+            width: 2px;
+            background-color: rgba(255, 100, 100, 0.3);
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .animate-heartbeat { animation: heartbeat 2s infinite; }
+        
+        .typewriter-cursor::after {
+            content: '|';
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center text-gray-800">
+
+    <!-- PANTALLA 1: CONTEO REGRESIVO -->
+    <div id="screen-countdown" class="flex flex-col items-center justify-center w-full max-w-4xl p-6 text-center absolute inset-0 z-50 bg-gradient-to-br from-pink-100 to-purple-100 transition-opacity duration-1000">
+        
+        <h1 class="text-4xl md:text-6xl font-black text-purple-700 mb-4 drop-shadow-md">
+            ¡Falta muy poco para tu cumple! 🎉
+        </h1>
+        <p class="text-lg md:text-xl text-pink-600 mb-10 font-semibold">
+            El tiempo vuela cuando esperas algo genial...
+        </p>
+
+        <!-- Reloj -->
+        <div class="flex flex-wrap justify-center gap-4 md:gap-8 mb-12">
+            <div class="flex flex-col items-center bg-white p-4 md:p-6 rounded-3xl shadow-lg w-24 md:w-32 border-4 border-pink-200">
+                <span id="days" class="text-4xl md:text-5xl font-bold text-pink-500">00</span>
+                <span class="text-sm md:text-base text-gray-500 font-semibold uppercase mt-2">Días</span>
+            </div>
+            <div class="flex flex-col items-center bg-white p-4 md:p-6 rounded-3xl shadow-lg w-24 md:w-32 border-4 border-purple-200">
+                <span id="hours" class="text-4xl md:text-5xl font-bold text-purple-500">00</span>
+                <span class="text-sm md:text-base text-gray-500 font-semibold uppercase mt-2">Horas</span>
+            </div>
+            <div class="flex flex-col items-center bg-white p-4 md:p-6 rounded-3xl shadow-lg w-24 md:w-32 border-4 border-pink-200">
+                <span id="minutes" class="text-4xl md:text-5xl font-bold text-pink-500">00</span>
+                <span class="text-sm md:text-base text-gray-500 font-semibold uppercase mt-2">Minutos</span>
+            </div>
+            <div class="flex flex-col items-center bg-white p-4 md:p-6 rounded-3xl shadow-lg w-24 md:w-32 border-4 border-purple-200">
+                <span id="seconds" class="text-4xl md:text-5xl font-bold text-purple-500">00</span>
+                <span class="text-sm md:text-base text-gray-500 font-semibold uppercase mt-2">Segundos</span>
+            </div>
+        </div>
+
+        <!-- Botón oculto por defecto -->
+        <button id="btn-sorpresa" class="hidden px-8 py-4 bg-pink-500 text-white font-bold rounded-full animate-heartbeat text-xl shadow-lg hover:bg-pink-600 transition-colors" onclick="openSurprise()">
+            ¡Ver Sorpresa!
+        </button>
+    </div>
+
+    <!-- PANTALLA 2: LA SORPRESA -->
+    <div id="screen-surprise" class="hidden flex-col items-center justify-start w-full max-w-5xl p-4 md:p-10 min-h-screen">
+        
+        <h1 class="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-600 mb-8 mt-8 drop-shadow-sm text-center">
+            ¡Happy Birthday, Manimanita!
+        </h1>
+
+        <div class="flex flex-col lg:flex-row flex-wrap justify-center items-center gap-8 lg:gap-12 mb-12 w-full">
+            <!-- Foto 1 -->
+            <div class="photo-frame -rotate-2 w-64 md:w-72">
+                <div class="w-full aspect-square bg-gray-200 rounded-sm overflow-hidden flex items-center justify-center">
+                    <img src="https://placehold.co/400x400/ffb6c1/ffffff?text=Foto+1" alt="♡" class="w-full h-full object-cover">
+                </div>
+                <p class="text-center font-handwriting text-2xl mt-4 text-gray-700">¡Siempre juntas!</p>
+            </div>
+
+            <!-- Foto 2 -->
+            <div class="photo-frame rotate-3 w-64 md:w-72 mt-8 lg:mt-0">
+                <div class="w-full aspect-square bg-gray-200 rounded-sm overflow-hidden flex items-center justify-center">
+                    <img src="https://placehold.co/400x400/d8b4e2/ffffff?text=Foto+2" alt="♡" class="w-full h-full object-cover">
+                </div>
+                <p class="text-center font-handwriting text-2xl mt-4 text-gray-700">Te amodoro 💕</p>
+            </div>
+
+            <!-- Foto 3 -->
+            <div class="photo-frame -rotate-3 w-64 md:w-72 mt-8 lg:mt-0">
+                <div class="w-full aspect-square bg-gray-200 rounded-sm overflow-hidden flex items-center justify-center">
+                    <img src="https://placehold.co/400x400/b4e2d8/ffffff?text=Foto+3" alt="♡" class="w-full h-full object-cover">
+                </div>
+                <p class="text-center font-handwriting text-2xl mt-4 text-gray-700">Los mejores momentos</p>
+            </div>
+        </div>
+
+        <div class="w-full max-w-3xl paper-letter p-8 md:p-12 mb-16">
+            <h2 class="font-handwriting text-4xl text-purple-600 mb-6 pl-6">Para la mejor hermana del mundo:</h2>
+            <div class="pl-6 text-xl md:text-2xl font-handwriting text-gray-800 leading-[30px] typewriter-cursor min-h-[200px]" id="letter-text">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. LÓGICA DEL CONTEO REGRESIVO ---
+        
+        // Define la fecha exacta aquí (Año, Mes [0-11], Día, Hora, Minuto, Segundo)
+        // OJO: Enero es 0, Noviembre es 10, Diciembre es 11.
+        const birthdayTime = new Date(2026, 10, 9, 0, 0, 0).getTime(); 
+
+        const timerInterval = setInterval(updateCountdown, 1000);
+        const btnSorpresa = document.getElementById("btn-sorpresa");
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = birthdayTime - now;
+
+            if (distance <= 0) {
+                // El tiempo llegó a cero
+                clearInterval(timerInterval);
+                
+                // Forzar los números a 00
+                document.getElementById("days").innerText = "00";
+                document.getElementById("hours").innerText = "00";
+                document.getElementById("minutes").innerText = "00";
+                document.getElementById("seconds").innerText = "00";
+                
+                // Revelar el botón
+                btnSorpresa.classList.remove("hidden");
+                btnSorpresa.classList.add("inline-block");
+                return;
+            }
+
+            // Calcular tiempo restante
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Actualizar el DOM
+            document.getElementById("days").innerText = days.toString().padStart(2, '0');
+            document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
+            document.getElementById("minutes").innerText = minutes.toString().padStart(2, '0');
+            document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
+        }
+        
+        updateCountdown();
+
+        // --- 2. LÓGICA DE TRANSICIÓN Y CONFETI ---
+        const screenCountdown = document.getElementById('screen-countdown');
+        const screenSurprise = document.getElementById('screen-surprise');
+
+        function openSurprise() {
+            screenCountdown.classList.add('fade-out');
+            
+            setTimeout(() => {
+                screenCountdown.style.display = 'none';
+                screenSurprise.classList.remove('hidden');
+                screenSurprise.classList.add('fade-in');
+                triggerConfetti();
+                setTimeout(typeWriter, 800); 
+            }, 800);
+        }
+
+        function triggerConfetti() {
+            const duration = 5 * 1000;
+            const animationEnd = Date.now() + duration;
+            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 100, colors: ['#ffb6c1', '#d8b4e2', '#ffffff', '#ff69b4'] };
+
+            function randomInRange(min, max) { return Math.random() * (max - min) + min; }
+
+            const interval = setInterval(function() {
+                const timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) return clearInterval(interval);
+
+                const particleCount = 40 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
+
+        // --- 3. LÓGICA DE LA CARTA ---
+        const letterContent = `
+            ¡Feliz cumpleaños!<br><br>
+            Hoy celebramos un año más de tu vida, y no podría estar más feliz de compartirlo contigo. 
+            Eres más que una hermana para mí, eres mi compañera de aventuras, mi confidente y una de mis personas favoritas en todo el mundo.<br><br>
+            Espero que este día esté lleno de sorpresas, risas, pastel y mucho amor. 
+            Que todos tus deseos se hagan realidad y que este nuevo año te traiga muchísima felicidad.<br><br>
+            ¡Te quiero con todo mi corazón! Disfruta mucho tu día.<br><br>
+            Con mucho cariño,<br>
+            Tu herman@.
+        `;
+        
+        const textContainer = document.getElementById('letter-text');
+        let index = 0;
+        let isTag = false;
+        let textTag = "";
+
+        function typeWriter() {
+            if (index < letterContent.length) {
+                let char = letterContent.charAt(index);
+                if(char === '<') isTag = true;
+                
+                if (isTag) {
+                    textTag += char;
+                    if(char === '>') {
+                        isTag = false;
+                        textContainer.innerHTML += textTag;
+                        textTag = "";
+                    }
+                } else {
+                    textContainer.innerHTML += char;
+                }
+                index++;
+                setTimeout(typeWriter, Math.random() * 40 + 30);
+            }
+        }
+    </script>
+</body>
+</html>
