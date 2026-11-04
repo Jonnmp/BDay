@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="robots" content="noindex, nofollow">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>¡Happy Birthday!</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -114,14 +115,15 @@
             ¡Ver Sorpresa!
         </button>
 
-        <!-- BOTÓN DE PRUEBA (Bórralo antes de dárselo) -->
-        <button onclick="openSurprise()" class="mt-8 px-6 py-2 bg-gray-800 text-white font-bold rounded-full opacity-50 hover:opacity-100 transition-opacity">
-            [Prueba: Ver sorpresa ahora]
-        </button>
     </div>
 
     <!-- PANTALLA 2: LA SORPRESA -->
     <div id="screen-surprise" class="hidden flex-col items-center justify-start w-full max-w-5xl p-4 md:p-10 min-h-screen">
+
+        <!-- Botón flotante de control de audio -->
+        <button onclick="toggleMusica()" class="fixed top-4 right-4 z-50 bg-white/80 backdrop-blur-sm p-3 rounded-full shadow-md text-xl hover:scale-110 transition-transform">
+            🎵
+        </button>
         
         <h1 class="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-600 mb-8 mt-8 drop-shadow-sm text-center">
             ¡Happy Birthday, Manimanita!
@@ -210,6 +212,8 @@
         const screenSurprise = document.getElementById('screen-surprise');
 
         function openSurprise() {
+            const musica = document.getElementById('musica-cumple');
+            musica.play().catch(error => console.log("Autoplay bloqueado: ", error));
             screenCountdown.classList.add('fade-out');
             
             setTimeout(() => {
@@ -273,6 +277,17 @@
                 setTimeout(typeWriter, Math.random() * 40 + 30);
             }
         }
+
+        function toggleMusica() {
+            const musica = document.getElementById('musica-cumple');
+            if (musica.paused) {
+                musica.play();
+            } else {
+                musica.pause();
+            }
+}
     </script>
+    <!-- Reproductor de música oculto -->
+    <audio id="musica-cumple" src="mañanitas.mp3" loop></audio>
 </body>
 </html>
